@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4">Transaction Detail</h2>
+<div class="mb-3"><strong>Student:</strong> {{ transaction.StudentName }}</div>
+<div class="mb-3"><strong>Course:</strong> {{ transaction.Course }}</div>
+<div class="mb-3"><strong>Year:</strong> {{ transaction.Year }}</div>
+<div class="mb-3"><strong>Status:</strong> {{ transaction.Status }}</div>
+<div class="mb-3"><strong>Request Date:</strong> {{ transaction.RequestDate }}</div>
+<div class="mb-3"><strong>Due Date:</strong> {{ transaction.DueDate }}</div>
+
+<h5>
+  {% if transaction.Status == "Approved" or transaction.Status == "Returned" %}
+    Items Borrowed:
+  {% else %}
+    Items Requested:
+  {% endif %}
+</h5>
+<ul>
+    {% for item in items %}
+    <li>{{ item.Quantity }} x {{ item.Name }}</li>
+    {% endfor %}
+</ul>
+<a href="/dashboard" class="btn btn-secondary mt-3">Back to Dashboard</a>
+{% endblock %}

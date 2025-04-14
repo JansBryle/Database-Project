@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4">Approve Transaction</h2>
+
+<form method="POST" class="form-group">
+    <label for="due_date">Set Due Date:</label>
+    <input type="date" id="due_date" name="due_date" class="form-control" required>
+    <button type="submit" class="btn btn-success mt-2">Approve</button>
+</form>
+{% endblock %}

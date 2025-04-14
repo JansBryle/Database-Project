@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Notifications</h2>
+
+{% if notifications %}
+    <ul class="list-group">
+        {% for notification in notifications %}
+        <li class="list-group-item d-flex justify-content-between">
+            <span>{{ notification.Message }}</span>
+            <a href="/mark_as_read/{{ notification.NotificationID }}" class="btn btn-sm btn-primary">Mark as Read</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No new notifications</p>
+{% endif %}
+{% endblock %}

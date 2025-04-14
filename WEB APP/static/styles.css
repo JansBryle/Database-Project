@@ -1,0 +1,109 @@
+body {
+    background-color: #f4f6f9; /* Light mode default */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.night-mode {
+    background-color: #1e1e1e; /* Darker background for night mode */
+    color: white; /* Light text for night mode */
+}
+
+nav {
+    background-color: #00274D; /* Dark blue for the navbar */
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+nav.night-mode {
+    background-color: #1a2b3c; /* Darker navbar for night mode */
+}
+
+nav a {
+    color: #FFCB05;
+    margin: 0 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav.night-mode a {
+    color: #FFD700; /* Lighter yellow for night mode links */
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.container.night-mode {
+    background-color: #333; /* Darker background for content area in night mode */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* More subtle shadow */
+}
+
+h1, h2, h3 {
+    color: #00274D;
+}
+
+button, .btn {
+    background-color: #FFCB05;
+    color: #00274D;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover, .btn:hover {
+    background-color: #e0b800;
+}
+
+button.night-mode, .btn.night-mode {
+    background-color: #FFD700; /* Lighter buttons in night mode */
+    color: #1e1e1e;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff; /* Ensure tables remain light */
+}
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table th {
+    background-color: #00274D;
+    color: white;
+}
+
+table.night-mode {
+    background-color: #f4f6f9; /* Keep the table light even in night mode */
+}
+
+/* Smooth Transition */
+body, nav, .container {
+    transition: all 0.3s ease;
+}

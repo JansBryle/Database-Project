@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3 class="mb-4">Student Profile</h3>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5>{{ student.Name }}</h5>
+        <p><strong>Email:</strong> {{ student.Email }}</p>
+        <p><strong>Course:</strong> {{ student.Course }}</p>
+        <p><strong>Year:</strong> {{ student.Year }}</p>
+    </div>
+</div>
+
+<h5 class="mt-4">Borrowed Materials</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Request Date</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Materials</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tx in transactions %}
+        <tr>
+            <td>{{ tx.TransactionID }}</td>
+            <td>{{ tx.RequestDate }}</td>
+            <td>{{ tx.DueDate or 'Not Set' }}</td>
+            <td>{{ tx.Status }}</td>
+            <td>{{ tx.Materials }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+{% endblock %}

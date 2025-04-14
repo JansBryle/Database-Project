@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Create Lab Staff</h2>
+
+<!-- Flash message for password mismatch -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="POST" action="{{ url_for('create_lab_staff') }}">
+    <div class="mb-3">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" class="form-control" name="name" required>
+    </div>
+    <div class="mb-3">
+        <label for="contact" class="form-label">Email</label>
+        <input type="email" class="form-control" name="contact" required>
+    </div>
+    <div class="mb-3">
+        <label for="role" class="form-label">Role</label>
+        <select name="role" class="form-control" required>
+            <option disabled selected>Select Role</option>
+            <option>Admin</option>
+            <option>LabManager</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" name="password" required>
+    </div>
+    <div class="mb-3">
+        <label for="confirm_password" class="form-label">Confirm Password</label>
+        <input type="password" class="form-control" name="confirm_password" required>
+    </div>
+    <button type="submit" class="btn btn-success">Create Staff</button>
+    <a href="{{ url_for('manage_accounts') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4">Borrow Transactions by Student</h2>
+
+<!-- Filters -->
+<form method="get" class="row g-2 mb-4">
+  <div class="col-md-3">
+    <label class="form-label">Time Range</label>
+    <select name="time" class="form-select" onchange="this.form.submit()">
+      {% for option in ['All', 'Today', 'This Week', 'This Month', 'This Year'] %}
+      <option value="{{ option }}" {% if selected_time == option %}selected{% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Status</label>
+    <select name="status" class="form-select" onchange="this.form.submit()">
+      {% for option in ['All', 'Pending', 'Approved', 'Rejected', 'Overdue', 'Returned'] %}
+      <option value="{{ option }}" {% if selected_status == option %}selected{% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Material</label>
+    <select name="material" class="form-select" onchange="this.form.submit()">
+      <option value="All" {% if selected_material == 'All' %}selected{% endif %}>All</option>
+      {% for mat in material_names %}
+      <option value="{{ mat }}" {% if selected_material == mat %}selected{% endif %}>{{ mat }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3 d-flex align-items-end">
+    <a href="/dashboard" class="btn btn-secondary w-100">Reset Filters</a>
+  </div>
+</form>
+
+<!-- Accordion Transactions -->
+<div class="accordion" id="studentAccordion">
+  {% for student_id, student in students.items() %}
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="heading{{ student_id }}">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ student_id }}" aria-expanded="false" aria-controls="collapse{{ student_id }}">
+        <span class="{% if 'Overdue' in student.transactions | map(attribute='FinalStatus') | list %}text-danger fw-bold
+             {% elif 'Pending' in student.transactions | map(attribute='FinalStatus') | list %}text-warning fw-bold
+             {% else %}text-dark{% endif %}">
+          {{ student.name }} - {{ student.course }} ({{ student.year }})
+        </span>
+      </button>
+    </h2>
+    <div id="collapse{{ student_id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ student_id }}" data-bs-parent="#studentAccordion">
+      <div class="accordion-body p-0">
+        <table class="table table-bordered mb-0">
+          <thead class="table-success">
+            <tr>
+              <th>Transaction ID</th>
+              <th>Status</th>
+              <th>Request Date</th>
+              <th>Due Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for tx in student.transactions %}
+            <tr class="{{ 'table-danger' if tx.FinalStatus == 'Overdue' else '' }}">
+              <td>{{ tx.TransactionID }}</td>
+              <td>
+                <span class="badge 
+                  {% if tx.FinalStatus == 'Pending' %} bg-warning text-dark
+                  {% elif tx.FinalStatus == 'Approved' %} bg-primary
+                  {% elif tx.FinalStatus == 'Returned' %} bg-success
+                  {% elif tx.FinalStatus == 'Rejected' or tx.FinalStatus == 'Overdue' %} bg-danger
+                  {% else %} bg-secondary
+                  {% endif %}
+                ">
+                  {{ tx.FinalStatus }}
+                </span>
+              </td>
+              <td>{{ tx.RequestDate }}</td>
+              <td>{{ tx.DueDate if tx.FinalStatus in ['Overdue', 'Approved'] else 'Not Set' }}</td>
+              <td>
+                {% if tx.FinalStatus == 'Pending' %}
+                    <a href="/approve/{{ tx.TransactionID }}" class="btn btn-sm btn-success mb-1">Approve</a>
+                    <a href="/reject/{{ tx.TransactionID }}" class="btn btn-sm btn-danger mb-1">Reject</a><br>
+                    <a href="/transaction/{{ tx.TransactionID }}" class="btn btn-sm btn-info mt-1">Details</a>
+                {% elif tx.FinalStatus == 'Overdue' %}
+                    <a href="/send_reminder/{{ tx.TransactionID }}" class="btn btn-sm btn-warning mb-1">Send Reminder</a><br>
+                    <a href="/returned/{{ tx.TransactionID }}" class="btn btn-sm btn-success mt-1">Returned</a><br>
+                    <a href="/transaction/{{ tx.TransactionID }}" class="btn btn-sm btn-secondary mt-1">Details</a>
+                {% elif tx.FinalStatus == 'Approved' %}
+                    <a href="/returned/{{ tx.TransactionID }}" class="btn btn-sm btn-warning mb-1">Returned</a><br>
+                    <a href="/transaction/{{ tx.TransactionID }}" class="btn btn-sm btn-info mt-1">Details</a>
+                {% elif tx.FinalStatus == 'Rejected' or tx.FinalStatus == 'Returned' %}
+                    <a href="/transaction/{{ tx.TransactionID }}" class="btn btn-sm btn-secondary">Details</a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

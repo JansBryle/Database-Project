@@ -1,0 +1,26 @@
+INSTALL THESE APPS FIRST:
+- MySQL workbench
+- Pyhton 3.13
+
+MYSQL workbench
+- Create a new SQL connection
+- Open the SQL connection
+- Go to Server Tab
+- Import data
+- and select the DBASE.sql
+
+Go to Projects folder
+- Edit config.py based on your SQL connection
+- Edit app.py and edit # MySQL Database Connection based on your SQL connection
+
+Open Command Prompt as an administrator
+run these commands
+
+cd /d [location of the app.py]
+example: cd /d D:\Users\Janui\Downloads\DBASE FINAL PROJECT\PROJECT
+
+pip install -r requirements.txt
+python app.py
+
+after running all those commands go to your browser and put this in
+127.0.0.1:5000

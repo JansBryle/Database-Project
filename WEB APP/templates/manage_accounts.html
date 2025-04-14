@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4">Manage Accounts</h2>
+
+<!-- Top Buttons -->
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+  <div class="mb-2">
+    <a href="{{ url_for('create_user') }}" class="btn btn-success me-2">
+      <i class="bi bi-person-plus-fill"></i> Add Student
+    </a>
+    {% if session.role == 'Admin' %}
+    <a href="{{ url_for('create_lab_staff') }}" class="btn btn-primary">
+      <i class="bi bi-person-plus"></i> Add Lab Staff
+    </a>
+    {% endif %}
+  </div>
+
+  <!-- Search Form -->
+  <form method="get" class="d-flex align-items-center" style="gap: 8px;">
+    <input type="text" class="form-control form-control-sm" name="search" placeholder="Search by name or email" value="{{ request.args.get('search', '') }}" style="width: 240px;">
+    <button type="submit" class="btn btn-success btn-sm d-flex align-items-center px-3">
+      <i class="bi bi-search me-1"></i> Search
+    </button>
+    <a href="{{ url_for('manage_accounts') }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center px-3">
+      Clear
+    </a>
+  </form>
+</div>
+
+
+<!-- Students Table -->
+<div class="card mb-4">
+  <div class="card-header bg-success text-white">
+    <i class="bi bi-people-fill me-1"></i> Student Users
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped mb-0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Course</th>
+          <th>Year</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in users %}
+        <tr>
+          <td>{{ student.Name }}</td>
+          <td>{{ student.Email }}</td>
+          <td>{{ student.Course }}</td>
+          <td>{{ student.Year }}</td>
+          <td>
+            <a href="{{ url_for('delete_user', user_id=student.StudentID) }}" class="btn btn-danger btn-sm" title="Delete">
+              <i class="bi bi-trash-fill"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Lab Managers Table -->
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    <i class="bi bi-person-badge-fill me-1"></i> Lab Managers
+  </div>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped mb-0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for staff_member in staff %}
+        <tr>
+          <td>{{ staff_member.Name }}</td>
+          <td>{{ staff_member.Contact }}</td>
+          <td>{{ staff_member.role }}</td>
+          <td>
+            {% if session.manager_id != staff_member.ManagerID and staff_member.role != 'Admin' %}
+            <a href="{{ url_for('delete_lab_staff', manager_id=staff_member.ManagerID) }}" class="btn btn-danger btn-sm" title="Delete">
+              <i class="bi bi-trash-fill"></i>
+            </a>
+            {% else %}
+            —
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

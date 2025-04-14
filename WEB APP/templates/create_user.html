@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Create User</h2>
+
+<!-- Flash message display -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="POST" action="{{ url_for('create_user') }}">
+    <div class="mb-3">
+        <label for="name" class="form-label">Full Name</label>
+        <input type="text" class="form-control" name="name" required>
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" name="email" required>
+    </div>
+    <div class="mb-3">
+        <label for="course" class="form-label">Course</label>
+        <select class="form-control" name="course" required>
+            <option disabled selected>Select Course</option>
+            <option>BFA</option>
+            <option>BSA</option>
+            <option>BSCE</option>
+            <option>BSCpE</option>
+            <option>BSEE</option>
+            <option>BSSE</option>
+            <option>BSEP</option>
+            <option>BSMxE</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="year" class="form-label">Year</label>
+        <select class="form-control" name="year" required>
+            <option disabled selected>Select Year</option>
+            <option>1st Year</option>
+            <option>2nd Year</option>
+            <option>3rd Year</option>
+            <option>4th Year</option>
+            <option>5th Year</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" name="password" required>
+    </div>
+    <div class="mb-3">
+        <label for="confirm_password" class="form-label">Confirm Password</label>
+        <input type="password" class="form-control" name="confirm_password" required>
+    </div>
+    <button type="submit" class="btn btn-success">Create User</button>
+    <a href="{{ url_for('manage_accounts') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

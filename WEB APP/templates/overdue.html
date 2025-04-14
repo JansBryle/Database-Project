@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3 class="mb-4">Overdue Borrow Requests</h3>
+
+<table class="table table-bordered">
+    <thead class="table-danger">
+        <tr>
+            <th>Transaction ID</th>
+            <th>Student</th>
+            <th>Due Date</th>
+            <th>Items</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for tx in overdue_transactions %}
+        <tr>
+            <td>{{ tx.TransactionID }}</td>
+            <td><a href="{{ url_for('student_profile', student_id=tx.StudentID) }}">{{ tx.StudentName }}</a></td>
+            <td>{{ tx.DueDate }}</td>
+            <td>
+                {% for item, qty in tx.Items.items() %}
+                    {{ qty }}x {{ item }}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                <a href="/send_reminder/{{ tx.TransactionID }}" class="btn btn-sm btn-warning">Send Reminder</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

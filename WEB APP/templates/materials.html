@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="mb-4">Material Inventory</h2>
+
+<!-- Add Material Form -->
+<form method="POST" class="row g-3 mb-4">
+  <div class="col-md-4">
+    <input type="text" name="name" class="form-control" placeholder="Material Name" required>
+  </div>
+  <div class="col-md-4">
+    <input type="text" name="description" class="form-control" placeholder="Description" required>
+  </div>
+  <div class="col-md-2">
+    <input type="number" name="quantity" class="form-control" placeholder="Stock" min="1" required>
+  </div>
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-success w-100">Add Material</button>
+  </div>
+</form>
+
+<!-- Materials Table -->
+<table class="table table-bordered table-hover">
+  <thead class="table-success">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Stock</th>
+      <th>Borrowed</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for material in materials %}
+    <tr>
+      <td>{{ material.MaterialID }}</td>
+      <td>{{ material.Name }}</td>
+      <td>{{ material.Description }}</td>
+      <td>
+        {% set remaining = material.StockQuantity - material.Borrowed %}
+        {% if remaining <= 0 %}
+          <span class="text-danger fw-bold">No more stocks</span>
+        {% else %}
+          {{ remaining }}
+        {% endif %}
+      </td>
+      <td>{{ material.Borrowed }}</td>
+      <td>
+        <a href="/materials/increase/{{ material.MaterialID }}" class="btn btn-sm btn-primary" title="Increase"><i class="bi bi-plus"></i></a>
+        <a href="/materials/decrease/{{ material.MaterialID }}" class="btn btn-sm btn-warning" title="Decrease"><i class="bi bi-dash"></i></a>
+        <a href="/materials/delete/{{ material.MaterialID }}" class="btn btn-sm btn-danger" title="Delete"><i class="bi bi-trash"></i></a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Toast for delete error -->
+{% if request.args.get('delete_error') == 'true' %}
+<script>
+  window.onload = () => {
+    const toastEl = document.getElementById('deleteToast');
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+  };
+</script>
+
+<div class="toast-container position-fixed top-0 end-0 p-3">
+  <div id="deleteToast" class="toast text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        ❌ Cannot delete material: It's currently being borrowed!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
